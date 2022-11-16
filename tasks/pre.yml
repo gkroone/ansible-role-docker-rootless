@@ -17,7 +17,23 @@
            'slirp4netns', 'uidmap']
     state: present
     install_recommends: false
-  when: ansible_os_family == "Debian"
+  when: ansible_os_family == "Debian" and not ansible_distribution_version == "18.04" 
+  tags:
+    - acl
+    - apt
+    - packages
+    - gidmap
+
+- name: Install ubuntu family packages
+  become: true
+  ansible.builtin.apt:
+    name: ['acl', 'apt-transport-https', 'ca-certificates', 'curl',
+           'dbus-user-session', 'gnupg', 'iptables', 'libpam-systemd',
+           'lsb-release', 'python3-pexpect', 'python3-pip', 'python3-six',
+           'uidmap']
+    state: present
+    install_recommends: false
+  when: ( ansible_distribution_version == "18.04"  )
   tags:
     - acl
     - apt
